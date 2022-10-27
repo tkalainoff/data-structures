@@ -20,17 +20,50 @@ $('tr').each(function(i, elem) {
         let row = $(elem).html();
 // run my function
         let allMeetings = getMeetings(row); 
-        console.log(allMeetings)
-
-        //meetings.push(getMeetings(row))
-        // fs.writeFileSync('data/address-test.json', JSON.stringify(allMeetings['streetAddress']));
-        // console.log('*** *** *** *** ***');
-    }
-//return meetings
+        // console.log(allMeetings)
+        meetings.push(allMeetings)
+      }
+return meetings
     
 });
 
+console.log(meetings)
+console.log(meetings.length)
+fs.writeFileSync('data/meetings08.json', JSON.stringify(meetings));
+console.log('*** *** *** *** ***');
 
+// global array for streetAddress info
+var addresses = [];
+
+// get trs
+$('tr').each(function(i, elem) {
+    // loop through trs
+    if ($(elem).attr("style")=="margin-bottom:10px") {
+        let row = $(elem).html();
+// run my function
+        let allAddresses = getAddresses(row); 
+        // console.log(allAddresses)
+        addresses.push(allAddresses)
+      }
+return addresses
+    
+});
+
+console.log(addresses)
+console.log(addresses.length)
+fs.writeFileSync('data/addresses08.json', JSON.stringify(addresses));
+console.log('*** *** *** *** ***');
+
+// get addresses only (umbrella function)
+function getAddresses (rawText) {
+  
+  // pull info for meeting metadata
+  let metaData = getMetadata(rawText)
+  let cleaned_Metadata = cleanMetadata(metaData)
+  let newAddress = getAddressOnly(cleaned_Metadata)
+  
+  return newAddress
+}
 
 // get meetings (umbrella function)
 function getMeetings (rawText) {
@@ -52,12 +85,6 @@ function getMeetings (rawText) {
   newAAmeeting.meetingDetails = newMeetingdetails
   
   return newAAmeeting
-
-  // push filled new meeting object to array holding all meetings
-  // allMeetings = []
-  // allMeetings.push(newAAmeeting)
-  
-
 }
 
 
@@ -119,6 +146,17 @@ function getAddress (rawText) {
   return newAddress
 }
 
+// get address only
+
+function getAddressOnly (rawText) {
+  var newAddress = rawText.split('<br>')[2].split(',')[0].trim()
+  // newAddress.roomName = rawText.split('<br>')[2].split(',')[1].trim()
+  // newAddress.crossStreet = rawText.split(/>|</)[16].trim().split(/\(|\)/)[1]
+  // newAddress.stateName = rawText.split(/>|</)[16].split(' ').at(-2)
+  // newAddress.zipCode = rawText.split(/>|</)[16].split(' ').at(-1).trim()
+
+  return newAddress
+}
 
 // get meeting data as array
 

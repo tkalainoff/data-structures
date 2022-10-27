@@ -15,8 +15,8 @@ const API_URL = 'https://geoservices.tamu.edu/Services/Geocode/WebService/Geocod
 // geocode addresses
 let meetingsData = [];
 let dataIssues = [];
-let addresses = fs.readFileSync('data/addressesZone08.json');
-// let addresses = ['109 West 129th Street', '240 West 145th Street', '469 West 142nd Street']
+// let addresses = fs.readFileSync('data/addressesZone08.json');
+let addresses = ['109 West 129th Street', '240 West 145th Street', '469 West 142nd Street']
 
 // eachSeries in the async module iterates over an array and operates on each item in the array in series
 async.eachSeries(addresses, function(value, callback) {
