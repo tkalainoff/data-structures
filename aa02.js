@@ -10,6 +10,9 @@ var content = fs.readFileSync('data/m08.txt');
 // load `content` into a cheerio object
 var $ = cheerio.load(content);
 
+// global array for meeting info
+var meetings = [];
+
 // get trs
 $('tr').each(function(i, elem) {
     // loop through trs
@@ -17,11 +20,13 @@ $('tr').each(function(i, elem) {
         let row = $(elem).html();
 // run my function
         let allMeetings = getMeetings(row); 
-        //console.log(allMeetings)
-        fs.writeFileSync('data/address-test.json', JSON.stringify(allMeetings['streetAddress']));
-        console.log('*** *** *** *** ***');
-    }
+        console.log(allMeetings)
 
+        // meetings.push(getMeetings(row))
+        // fs.writeFileSync('data/address-test.json', JSON.stringify(allMeetings['streetAddress']));
+        // console.log('*** *** *** *** ***');
+    }
+// return meetings
     
 });
 
