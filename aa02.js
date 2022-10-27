@@ -5,22 +5,28 @@ var cheerio = require('cheerio');
 
 // load the cheerio object into a variable, `content`
 // which holds data and metadata about the html file (written as txt)
-var content = fs.readFileSync('data/m10.txt');
+var content = fs.readFileSync('data/m08.txt');
 
 // load `content` into a cheerio object
 var $ = cheerio.load(content);
 
-
+// get trs
 $('tr').each(function(i, elem) {
+    // loop through trs
     if ($(elem).attr("style")=="margin-bottom:10px") {
         let row = $(elem).html();
 // run my function
         let allMeetings = getMeetings(row); 
-        console.log(allMeetings)
-        
+        //console.log(allMeetings)
+        fs.writeFileSync('data/address-test.json', JSON.stringify(allMeetings['streetAddress']));
+        console.log('*** *** *** *** ***');
     }
+
     
 });
+
+
+
 // get meetings (umbrella function)
 function getMeetings (rawText) {
   
@@ -166,10 +172,10 @@ return meetingDetails
 
 
 // log trs
-function logTrs (tr) {
-    console.log(tr)
-    console.log('*************')
-    meetings.push(tr)
-    console.log(meetings.length)
+// function logTrs (tr) {
+    //console.log(tr)
+    // console.log('*************')
+    // meetings.push(tr)
+    // console.log(meetings.length)
     
-}
+// }
