@@ -22,11 +22,11 @@ $('tr').each(function(i, elem) {
         let allMeetings = getMeetings(row); 
         console.log(allMeetings)
 
-        // meetings.push(getMeetings(row))
+        //meetings.push(getMeetings(row))
         // fs.writeFileSync('data/address-test.json', JSON.stringify(allMeetings['streetAddress']));
         // console.log('*** *** *** *** ***');
     }
-// return meetings
+//return meetings
     
 });
 
@@ -84,8 +84,10 @@ function getAddress (rawText) {
   var newAddress = {}
   newAddress.locationName = rawText.split(/>|</)[4]
   //console.log(rawText.split(/>|</))
-  newAddress.meetingName = rawText.split(/>|</)[10]
-  newAddress.streetAddress = rawText.split(/>|</)[14].split(/\t|\n/)[1].trim().replace(',', '')
+  newAddress.meetingName = rawText.split(/>|</)[10].split(' -')[0]
+  // newAddress.streetAddress = rawText.split(/>|</)[14].split(/\t|\n/)[1].trim().replace(',', '')
+  newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim()
+  newAddress.roomName = rawText.split('<br>')[2].split(',')[1].trim()
   newAddress.crossStreet = rawText.split(/>|</)[16].trim().split(/\(|\)/)[1]
   newAddress.stateName = rawText.split(/>|</)[16].split(' ').at(-2)
   newAddress.zipCode = rawText.split(/>|</)[16].split(' ').at(-1).trim()
@@ -93,7 +95,15 @@ function getAddress (rawText) {
       if (newAddress.locationName === ('')){
         newAddress.locationName = "n/a"
       }
-  
+      
+      if (newAddress.roomName === ('')){
+        newAddress.roomName = "n/a"
+      }
+
+      if (newAddress.stateName !== ('NY')){
+        newAddress.stateName = "NY"
+      }
+
       if (rawText.includes('Wheelchair Access')){
         newAddress.accessibility = "Wheelchair Accessible"
       }else{
