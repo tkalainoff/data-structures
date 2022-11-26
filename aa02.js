@@ -2,13 +2,14 @@
 
 var fs = require('fs');
 var cheerio = require('cheerio');
+var _ = require('lodash')
 
 // load helper function library
 var helper = require('./aa_helpers');
 
 // load the cheerio object into a variable, `content`
 // which holds data and metadata about the html file (written as txt)
-var content = fs.readFileSync('data/m08.txt');
+var content = fs.readFileSync('data/mAll.txt');
 
 // load `content` into a cheerio object
 var $ = cheerio.load(content);
@@ -30,14 +31,16 @@ return meetings
     
 });
 
-// console.log(meetings)
+// console.log(meetings[42])
+console.log(meetings)
 // // console.log(meetings[0]['meetingDetails'])
-// console.log(meetings.length)
-// fs.writeFileSync('data/meetings08-test.json', JSON.stringify(meetings));
+console.log(meetings.length)
+// fs.writeFileSync('data/meetingsAll-test.json', JSON.stringify(meetings));
 console.log('*** *** *** *** ***');
 
 // global array for streetAddress info
 var addresses = [];
+
 
 // get trs
 $('tr').each(function(i, elem) {
@@ -53,9 +56,13 @@ return addresses
     
 });
 
-// console.log(addresses)
-// console.log(addresses.length)
-// fs.writeFileSync('data/addresses08-test.json', JSON.stringify(addresses));
+var uniq_addresses = _.uniq(addresses);
+
+console.log(addresses[42])
+console.log(addresses.length)
+console.log(uniq_addresses)
+console.log(uniq_addresses.length)
+// fs.writeFileSync('data/addressesAll-test.json', JSON.stringify(addresses));
 console.log('*** *** *** *** ***');
 
 // get addresses only (umbrella function)

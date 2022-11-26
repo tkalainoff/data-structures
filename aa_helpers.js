@@ -59,6 +59,7 @@ function getAddress (rawText) {
   newAddress.meetingName = rawText.split(/>|</)[10].split(' -')[0]
   // newAddress.streetAddress = rawText.split(/>|</)[14].split(/\t|\n/)[1].trim().replace(',', '')
   newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim()
+  newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim())
   newAddress.roomName = rawText.split('<br>')[2].split(',')[1].trim()
   newAddress.crossStreet = rawText.split(/>|</)[16].trim().split(/\(|\)/)[1]
   newAddress.stateName = rawText.split(/>|</)[16].split(' ').at(-2)
@@ -67,7 +68,84 @@ function getAddress (rawText) {
       if (newAddress.locationName === ('')){
         newAddress.locationName = "n/a"
       }
-      
+
+      if (newAddress.meetingName === ('ROOSEVELT ISLAND SERENITY')){
+        newAddress.locationName = rawText.split('<br>')[2].split(',')[0].trim()
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[1].trim()
+        newAddress.roomName = rawText.split('<br>')[2].split(',')[2].split(' ')[1]
+        newAddress.zipCode = rawText.split('<br>')[2].split(',')[2].split(' ')[2]
+      }
+
+      if (newAddress.streetAddress.includes('- ')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].split('- ')[0].trim()
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].split('- ')[0].trim())
+        newAddress.roomName = rawText.split('<br>')[2].split(',')[0].split('- ')[1].trim()
+      }
+
+      if (newAddress.streetAddress.includes(' (')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].split('(')[0].trim()
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].split('(')[0].trim())
+        newAddress.roomName = rawText.split('<br>')[2].split(',')[0].split('(')[1].trim()
+      }
+
+      if (newAddress.streetAddress.includes('@')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().split('@')[0].trim()
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().split('@')[0].trim())
+        newAddress.roomName = rawText.split('<br>')[2].split(',')[0].split('@')[1].trim()
+      }
+
+      if (newAddress.streetAddress.includes(' Rm ')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].split(' R')[0].trim()
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].split(' R')[0].trim())
+        newAddress.roomName = rawText.split('<br>')[2].split(',')[0].split('t ')[1].trim()
+      }
+
+      if (newAddress.streetAddress.includes('337 E.')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].replace('337 E.', '337 E').trim()
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].replace('337 E.', '337 E').trim())
+      }
+
+      if (newAddress.streetAddress.includes('Tenth')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Tenth', '10th')
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('Tenth', '10th'))
+      }
+
+      if (newAddress.streetAddress.includes('Ninth')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Ninth', '9th')
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('Ninth', '9th'))
+      }
+
+      if (newAddress.streetAddress.includes('Fourth')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Fourth', '4th')
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('Fourth', '4th'))
+      }
+
+      if (newAddress.streetAddress.includes('Grammercy')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Grammercy', 'Gramercy')
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('Grammercy', 'Gramercy'))
+      }
+
+      if (newAddress.streetAddress.includes('Eastr')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Eastr', 'East')
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('Eastr', 'East'))
+      }
+
+      if (newAddress.streetAddress.includes('St.')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('St.', 'St')
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('St.', 'St'))
+      }
+
+      if (newAddress.streetAddress.includes('Street.')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].split('.')[0]
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].split('.')[0])
+        newAddress.roomName = rawText.split('<br>')[2].split(',')[0].split('.')[1]
+      }
+
+      if (newAddress.streetAddress.includes('Blvd.')){
+        newAddress.streetAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Blvd.', 'Blvd').trim()
+        newAddress.streetAddressReformat = reformatAddresses(rawText.split('<br>')[2].split(',')[0].trim().replace('Blvd.', 'Blvd')).trim()
+      }
+
       if (newAddress.roomName === ('')){
         newAddress.roomName = "n/a"
       }
@@ -95,12 +173,66 @@ function getAddress (rawText) {
 
 function getAddressOnly (rawText) {
   var newAddress = rawText.split('<br>')[2].split(',')[0].trim()
-  var newAddress_reformat = reformatAddresses(newAddress)
-  // newAddress.roomName = rawText.split('<br>')[2].split(',')[1].trim()
-  // newAddress.crossStreet = rawText.split(/>|</)[16].trim().split(/\(|\)/)[1]
-  // newAddress.stateName = rawText.split(/>|</)[16].split(' ').at(-2)
-  // newAddress.zipCode = rawText.split(/>|</)[16].split(' ').at(-1).trim()
+    if (newAddress.includes('- ')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].split('- ')[0].trim()
+    }
 
+    if (newAddress.includes(' (')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].split('(')[0].trim()
+    }
+
+    if (newAddress.includes('W.')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].replace('.', '').trim()
+    }
+
+    if (newAddress.includes('337 E.')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].replace('337 E.', '337 E').trim()
+    }
+
+    if (newAddress.includes('Tenth')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Tenth', '10th')
+    }
+
+    if (newAddress.includes('Ninth')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Ninth', '9th')
+    }
+
+    if (newAddress.includes('Fourth')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Fourth', '4th')
+    }
+
+    if (newAddress.includes('Grammercy')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Grammercy', 'Gramercy')
+    }
+
+    if (newAddress.includes('Eastr')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('Eastr', 'East')
+    }
+
+    if (newAddress.includes('Street.')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].split('.')[0]
+    }
+
+    if (newAddress.includes('St.')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().replace('St.', 'St')
+    }
+
+    if (newAddress.includes(' Rm ')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].split(' R')[0].trim()
+    }
+
+    if (newAddress.includes('Blvd.')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].replace('Blvd.', 'Blvd')
+    }
+
+    if (newAddress.includes('@')){
+      newAddress = rawText.split('<br>')[2].split(',')[0].trim().split('@')[0].trim()
+    }
+
+    if (newAddress === ('Church of the Good Shepard')){
+      newAddress = rawText.split('<br>')[2].split(',')[1].trim()
+    }
+  var newAddress_reformat = reformatAddresses(newAddress)
   return newAddress_reformat
 }
 
@@ -177,9 +309,14 @@ function reformatAddresses(rawText){
                     .replace('NORTH', 'N')
                     .replace('SOUTH', 'S')
                     .replace('STREET', 'ST')
-                    .replace('AVE', 'AVENUE')
+    
     return newString
   }
+
+// function to get unique addresses
+function getUnique(arr, key) {
+    return [...new Map(arr.map(item => [item[key], item])).values()]
+}
 
 module.exports = { getMetadata,
                 cleanMetadata,
@@ -189,3 +326,39 @@ module.exports = { getMetadata,
                 getMeetingdata, 
                 getMeetingDetails,
                 reformatAddresses };
+
+// NOT WORKING
+// function to sort through quality of input address and latlongs 
+// function getLatlongs (array) {
+  
+//   for(let i = 0; i < array.length; i++) {
+//   let newLatlong = {}
+
+//     if ((array)[i]["FeatureMatchingResultType"] !== "Success"){
+//     matchIssues.push(newLatlong)
+//     }
+//     else {
+//     newLatlong.address = (array)[i]["InputAddress"]["StreetAddress"]
+//     newLatlong.latLong = [(array)[i]["OutputGeocodes"][0]["OutputGeocode"]["Latitude"], (array)[i]["OutputGeocodes"][0]["OutputGeocode"]["Latitude"]]
+//     // console.log(newLatlong)
+//     latLongs_final.push(newLatlong)
+//     }
+//   }
+//   return latLongs_final
+//   // return matchIssues
+// }
+
+// function to merge address with addresses and latlongs
+// function mergeAddresses(array, arrMerg){
+//   let mergedData = []
+//   // let keys = Object.keys(mArr);
+//   for (let i=0; i<array.length; i++){
+//     for(let k=0; k<arrMerg.length; k++){
+//       if (array[i] == arrMerg[k]['address'].split(' New York')[0]){
+//       mergedData.push({'address':array[i], 'latLong': arrMerg[k]['latLong']});
+//       }
+//     }
+//   }
+//   console.log(mergedData)
+// return mergedData
+// }
