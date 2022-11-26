@@ -71,14 +71,3 @@ return mergedData
 }
 
 
-// function to reformat original addresses 
-function reformatAddresses(array){
-  let newStrings = []
-
-  for(let i = 0; i < array.length; i++) {
-    newString = (array)[i].toUpperCase().replace('WEST', 'W').replace('STREET', 'ST')
-
-    newStrings.push(newString)
-  }
-  return newStrings
-}
