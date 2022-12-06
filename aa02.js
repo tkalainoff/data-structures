@@ -10,7 +10,7 @@ var helper = require('./aa_helpers');
 
 // load the cheerio object into a variable, `content`
 // which holds data and metadata about the html file (written as txt)
-var content = fs.readFileSync('data/mAll.txt');
+var content = fs.readFileSync('data/m08.txt');
 
 // load `content` into a cheerio object
 var $ = cheerio.load(content);
@@ -59,10 +59,12 @@ return addresses
 
 var uniq_addresses = _.uniq(addresses);
 
-console.log(addresses[42])
+// console.log(addresses[42])
 console.log(addresses.length)
 console.log(uniq_addresses)
 console.log(uniq_addresses.length)
+console.log(meetings[0])
+// console.log(meetings[0]['meetingDetails'])
 // fs.writeFileSync('data/addressesAll-test.json', JSON.stringify(addresses));
 console.log('*** *** *** *** ***');
 
